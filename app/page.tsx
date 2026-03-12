@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, Github, Linkedin, Mail, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { usePostHog } from "posthog-js/react";
 
 const projects = [
   {
@@ -107,7 +108,11 @@ export default function Portfolio() {
   const [scrolled, setScrolled] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+ const posthog = usePostHog();
 
+ function handleGetInTouch() {
+   posthog.capture("get_in_touch", { source: "portfolio" });
+ }
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 100);
@@ -217,6 +222,7 @@ export default function Portfolio() {
 
           {/* Desktop CTA Button */}
           <Link
+            onClick={handleGetInTouch}
             href="#contact"
             className="hidden md:block px-6 py-3 bg-accent text-accent-foreground rounded-lg font-semibold text-sm hover:bg-accent/90 transition-all hover:shadow-lg"
           >
